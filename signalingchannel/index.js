@@ -25,6 +25,10 @@ io.on('connection', (socket) => {
     callback(socket.session);
   })
 
+  socket.on('end session', () => {
+    socket.to(socket.session.id).emit('session ended');
+  });
+
   socket.on('join session', async (sessionId, callback) => {
     socket.join(sessionId);
 

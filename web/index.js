@@ -37,17 +37,19 @@ function getHash() {
 }
 
 function setHash(value) {
-  window.location.hash = value;
+  if (value === null) {
+    history.replaceState(null, null, ' ');
+    return;
+  }
+  history.replaceState(null, null, '#' + value);
 }
 
 function closeSession() {
   peerConnection.close();
-  socket.emit('end session');
   setHash(null);
   createSessionButton.classList.remove('hide');
   closeSessionButton.classList.add('hide');
   remoteVideo.classList.add('hide');
-  remoteVideo.srcObject = null;
 }
 
 function main() {
@@ -74,7 +76,14 @@ function main() {
     });
   })
 
-  closeSessionButton.addEventListener('click', (e) => closeSession());
+  closeSessionButton.addEventListener('click', (e) => {
+    closeSession();
+    socket.emit('end session');
+  });
+
+  socket.on('session ended', () => {
+    closeSession();
+  });
 
   socket.on('initiate call', () => {
     peerConnection.createOffer({offerToReceiveVideo: 1})
