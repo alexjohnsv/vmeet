@@ -10,6 +10,10 @@ const localStream = new MediaStream();
 const localVideo = document.querySelector('#localVideo');
 localVideo.srcObject = localStream;
 
+const remoteStream = new MediaStream();
+const remoteVideo = document.querySelector('#remoteVideo');
+remoteVideo.srcObject = remoteStream;
+
 const constraints = {
   video: true,
   audio: true
@@ -42,6 +46,8 @@ function closeSession() {
   setHash(null);
   createSessionButton.classList.remove('hide');
   closeSessionButton.classList.add('hide');
+  remoteVideo.classList.add('hide');
+  remoteVideo.srcObject = null;
 }
 
 function main() {
@@ -101,10 +107,6 @@ function main() {
     }
   });
 
-  const remoteStream = new MediaStream();
-  const remoteVideo = document.querySelector('#remoteVideo');
-  remoteVideo.srcObject = remoteStream;
-
   peerConnection.ontrack = (e) => {
     remoteStream.addTrack(e.track, remoteStream);
   };
@@ -112,6 +114,9 @@ function main() {
   peerConnection.onconnectionstatechange = (e) => {
     if (peerConnection.connectionState === 'connected') {
       remoteVideo.classList.remove('hide');
+    }
+    if (peerConnection.connectionState === 'disconnected') {
+      remoteVideo.classList.add('hide');
     }
   }
 }
