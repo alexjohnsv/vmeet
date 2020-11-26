@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vmeet</title>
+
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="main">
+      <video id="remoteVideo" class="hide" autoplay playsinline controls="false"></video>
+      <video id="localVideo" autoplay playsinline controls="false"></video>
+    </div>
+
+    <div class="actions">
+      <button class="button create-session">Create</button>
+      <button class="button join-session hide">Join</button>
+      <button class="button close-session hide">Close</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

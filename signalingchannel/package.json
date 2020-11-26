@@ -1,0 +1,7 @@
+{
+  "name": "signalingchannel",
+  "version": "1.0.0",
+  "dependencies": {
+    "socket.io": "^3.0.3"
+  }
+}
