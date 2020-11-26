@@ -26,7 +26,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on('end session', () => {
-    socket.to(socket.session.id).emit('session ended');
+    const sessionId = socket.session.id;
+    socket.session = null;
+    socket.to(sessionId).emit('session ended');
   });
 
   socket.on('join session', async (sessionId, callback) => {
