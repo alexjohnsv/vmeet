@@ -1,4 +1,10 @@
+const socket = io('http://127.0.0.1:3000');
+
 const peerConnection = new RTCPeerConnection();
+
+const createSessionButton = document.querySelector('.create-session');
+const joinSessionButton = document.querySelector('.join-session');
+const closeSessionButton = document.querySelector('.close-session');
 
 const localStream = new MediaStream();
 const localVideo = document.querySelector('#localVideo');
@@ -30,13 +36,15 @@ function setHash(value) {
   window.location.hash = value;
 }
 
+function closeSession() {
+  peerConnection.close();
+  socket.emit('end session');
+  setHash(null);
+  createSessionButton.classList.remove('hide');
+  closeSessionButton.classList.add('hide');
+}
+
 function main() {
-  const socket = io('http://127.0.0.1:3000');
-
-  const createSessionButton = document.querySelector('.create-session');
-  const joinSessionButton = document.querySelector('.join-session');
-  const closeSessionButton = document.querySelector('.close-session');
-
   const sessionId = getHash();
 
   if (sessionId) {
@@ -59,6 +67,8 @@ function main() {
       closeSessionButton.classList.remove('hide');
     });
   })
+
+  closeSessionButton.addEventListener('click', (e) => closeSession());
 
   socket.on('initiate call', () => {
     peerConnection.createOffer({offerToReceiveVideo: 1})
